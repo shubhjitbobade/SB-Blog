@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import BlogList from './BlogList';
 
 function Home() {
-    const [name, setName] = useState('abhi');
-    const [age, setAge] = useState(25);
-    const handleCheck = () => {
-        setName('omkar');
-        setAge(30);
-    }
+    const [blogs, setBlogs] = useState(null);
+    const [isPending, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        setTimeout(() => {
+            fetch('http://localhost:8000/blogs')
+                .then(res => {
+                    if (!res.ok) {
+                        throw Error('could not featch the data for the resource');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    setBlogs(data);
+                    setIsPending(false);
+                    setError(null);
+                })
+                .catch((err) => {
+                    setIsPending(false);
+                    setError(err.message);
+                })
+        }, 1000)
+
+    }, []);
 
     return (
         <div className="home">
-            <h2>Homepage</h2>
-            <h3>My name is {name} and i am {age} old.</h3>
-            <button onClick={handleCheck}>click me</button>
+            {error && <div>{error}</div>}
+            {isPending && <div>Loading...</div>}
+            {blogs && <BlogList blogs={blogs} />}
         </div>
     );
 }
