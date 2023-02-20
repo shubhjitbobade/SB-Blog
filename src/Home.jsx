@@ -2,7 +2,7 @@ import BlogList from './BlogList';
 import useFeatch from './UseFetch';
 
 function Home() {
-    const { data: blogs, isPending, error } = useFeatch(' http://localhost:8000/blogs');
+    const { data: blogs, isPending, error } = useFeatch('http://localhost:8000/blogs');
 
     return (
         <div className="home">

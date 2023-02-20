@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
+
 
 const Create = () => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    const [auther, setAuther] = useState('');
+    const [author, setAuther] = useState('');
     const [isPending, setIsPending] = useState(false);
+    const history = useHistory();
     const handleSubmit = (e) => {
         e.preventDefault();
-        const blog = { title, body, auther };
+        const blog = { title, body, author };
         setIsPending(true);
         fetch('http://localhost:8000/blogs/', {
             method: 'POST',
@@ -17,6 +20,7 @@ const Create = () => {
             .then(() => {
                 console.log("New Blog Added");
                 setIsPending(false);
+                history.push('/');
             })
     }
     return (
@@ -37,10 +41,10 @@ const Create = () => {
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                 ></textarea>
-                <label>Blog auther:</label>
+                <label>Blog author:</label>
                 <select
                     required
-                    value={auther}
+                    value={author}
                     onChange={(e) => setAuther(e.target.value)}
                 >
                     <option value="Abhi">Abhi</option>
